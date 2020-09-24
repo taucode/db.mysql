@@ -24,9 +24,31 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{CD97430E-997
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{62DC4F5C-90B3-4C12-8102-DBBE3017A867}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TauCode.Db.MySql", "src\TauCode.Db.MySql\TauCode.Db.MySql.csproj", "{357B45B3-AE2C-48E2-A224-2E1BA3BAB585}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TauCode.Db.MySql.Tests", "test\TauCode.Db.MySql.Tests\TauCode.Db.MySql.Tests.csproj", "{22B74E30-8090-4C6C-9E3C-5B2DCB90DB72}"
+EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{357B45B3-AE2C-48E2-A224-2E1BA3BAB585}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{357B45B3-AE2C-48E2-A224-2E1BA3BAB585}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{357B45B3-AE2C-48E2-A224-2E1BA3BAB585}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{357B45B3-AE2C-48E2-A224-2E1BA3BAB585}.Release|Any CPU.Build.0 = Release|Any CPU
+		{22B74E30-8090-4C6C-9E3C-5B2DCB90DB72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{22B74E30-8090-4C6C-9E3C-5B2DCB90DB72}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{22B74E30-8090-4C6C-9E3C-5B2DCB90DB72}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{22B74E30-8090-4C6C-9E3C-5B2DCB90DB72}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{357B45B3-AE2C-48E2-A224-2E1BA3BAB585} = {CD97430E-9971-4978-AE15-3247387B5235}
+		{22B74E30-8090-4C6C-9E3C-5B2DCB90DB72} = {62DC4F5C-90B3-4C12-8102-DBBE3017A867}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2412B73A-1CC4-4E0E-853E-BED60A41911F}

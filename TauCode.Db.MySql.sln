@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30517.126
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{0A7F5C36-AFDB-46CC-8936-B486EB8FA65F}"
+	ProjectSection(SolutionItems) = preProject
+		build\azure-pipelines-dev.yml = build\azure-pipelines-dev.yml
+		build\azure-pipelines.yml = build\azure-pipelines.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "misc", "misc", "{E4C4C5B6-698D-40D5-8CA1-115E88267862}"
+	ProjectSection(SolutionItems) = preProject
+		misc\changelog.txt = misc\changelog.txt
+		misc\todo.txt = misc\todo.txt
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nuget", "nuget", "{44ADFB69-335B-4F5F-A41C-C0E960CF3DC1}"
+	ProjectSection(SolutionItems) = preProject
+		nuget\TauCode.Db.MySql.nuspec = nuget\TauCode.Db.MySql.nuspec
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{CD97430E-9971-4978-AE15-3247387B5235}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{62DC4F5C-90B3-4C12-8102-DBBE3017A867}"
+EndProject
+Global
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2412B73A-1CC4-4E0E-853E-BED60A41911F}
+	EndGlobalSection
+EndGlobal

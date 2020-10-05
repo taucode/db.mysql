@@ -1,4 +1,4 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
 using System.Data;
 
 namespace TauCode.Db.MySql
@@ -15,16 +15,15 @@ namespace TauCode.Db.MySql
         public IDbDialect GetDialect() => MySqlDialect.Instance;
 
         public IDbScriptBuilder CreateScriptBuilder(string schema) => new MySqlScriptBuilder(schema);
+        public IDbConnection CreateConnection() => new MySqlConnection();
 
-        public IDbInspector CreateDbInspector(IDbConnection connection, string schema) => new MySqlInspector(connection);
+        public IDbInspector CreateInspector(IDbConnection connection, string schema) => new MySqlInspector(connection);
 
         public IDbTableInspector CreateTableInspector(IDbConnection connection, string schema, string tableName) =>
             new MySqlTableInspector(connection, tableName);
 
         public IDbCruder CreateCruder(IDbConnection connection, string schema) => new MySqlCruder(connection);
 
-        public IDbSerializer CreateDbSerializer(IDbConnection connection, string schema) => new MySqlSerializer(connection);
-
-        public IDbConverter CreateDbConverter() => throw new NotSupportedException();
+        public IDbSerializer CreateSerializer(IDbConnection connection, string schema) => new MySqlSerializer(connection);
     }
 }

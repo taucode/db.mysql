@@ -14,7 +14,7 @@ namespace TauCode.Db.MySql
             var dbName = connection.GetDatabaseName();
 
             // todo check args
-            // todo: schema not used
+            // todo: schemaName not used (where is it? - Brezhnev)
 
             using var command = connection.CreateCommand();
 

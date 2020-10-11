@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using TauCode.Db;
 
 namespace TauCode.Db.MySql
 {
@@ -24,7 +23,7 @@ namespace TauCode.Db.MySql
 
         public override IDbUtilityFactory Factory => MySqlUtilityFactory.Instance;
 
-        protected override IReadOnlyList<string> GetTableNamesImpl(string schema)
+        protected override IReadOnlyList<string> GetTableNamesImpl(string schemaName)
         {
             var dbName = this.Connection.GetDatabaseName();
 
@@ -52,6 +51,11 @@ WHERE
                 .ToArray();
 
             return tableNames;
+        }
+
+        protected override HashSet<string> GetSystemSchemata()
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

@@ -7,8 +7,8 @@ namespace TauCode.Db.MySql
         //private const int MAX_SIZE_SURROGATE = -1;
         //private const string MAX_SIZE = "max";
 
-        public MySqlScriptBuilder(string schema)
-            : base(schema)
+        public MySqlScriptBuilder()
+            : base(null)
         {
         }
 

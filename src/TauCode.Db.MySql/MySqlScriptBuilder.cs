@@ -1,28 +1,48 @@
-﻿using TauCode.Db.Model;
+﻿using System;
+using System.Text;
+using TauCode.Db.Model;
 
 namespace TauCode.Db.MySql
 {
     public class MySqlScriptBuilder : DbScriptBuilderBase
     {
-        //private const int MAX_SIZE_SURROGATE = -1;
-        //private const string MAX_SIZE = "max";
-
-        public MySqlScriptBuilder()
-            : base(null)
+        public MySqlScriptBuilder(string schemaName)
+            : base(schemaName)
         {
+            if (schemaName == null)
+            {
+                throw new ArgumentNullException(nameof(schemaName));
+            }
         }
 
         public override IDbUtilityFactory Factory => MySqlUtilityFactory.Instance;
 
-        //protected override string TransformNegativeTypeSize(int size)
-        //{
-        //    if (size == MAX_SIZE_SURROGATE)
-        //    {
-        //        return MAX_SIZE;
-        //    }
+        protected override void WriteIdentityScriptFragment(StringBuilder sb, ColumnIdentityMold identity)
+        {
+            sb.Append("AUTO_INCREMENT");
+        }
 
-        //    return base.TransformNegativeTypeSize(size);
-        //}
+        protected override void WriteTypeDefinitionScriptFragment(StringBuilder sb, DbTypeMold type)
+        {
+            base.WriteTypeDefinitionScriptFragment(sb, type);
+
+            if (type.Properties.ContainsKey("character_set_name"))
+            {
+                sb.Append(" CHARACTER SET ");
+                sb.Append(type.Properties["character_set_name"]);
+            }
+
+            if (type.Properties.ContainsKey("collation_name"))
+            {
+                sb.Append(" COLLATE ");
+                sb.Append(type.Properties["collation_name"]);
+            }
+
+            if (type.Properties.ContainsKey("unsigned"))
+            {
+                sb.Append(" unsigned");
+            }
+        }
 
         protected override string BuildInsertScriptWithDefaultValues(TableMold table)
         {
@@ -31,8 +51,12 @@ namespace TauCode.Db.MySql
                 table.Name,
                 this.CurrentOpeningIdentifierDelimiter);
 
-            var result = $"INSERT INTO {decoratedTableName} DEFAULT VALUES";
-            return result;
+            var sb = new StringBuilder();
+            sb.Append("INSERT INTO ");
+            this.WriteSchemaPrefixIfNeeded(sb);
+            sb.Append($"{decoratedTableName} VALUES()");
+
+            return sb.ToString();
         }
     }
 }

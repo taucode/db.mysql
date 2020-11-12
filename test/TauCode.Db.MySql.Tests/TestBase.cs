@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using MySql.Data.MySqlClient;
+﻿using MySql.Data.MySqlClient;
 using NUnit.Framework;
 
 namespace TauCode.Db.MySql.Tests
@@ -9,79 +6,26 @@ namespace TauCode.Db.MySql.Tests
     [TestFixture]
     public abstract class TestBase
     {
-        protected IDbInspector DbInspector;
-        protected IDbConnection Connection;
-
-        protected virtual void OneTimeSetUpImpl()
-        {
-            this.Connection = new MySqlConnection(TestHelper.ConnectionString);
-            this.Connection.Open();
-            this.DbInspector = new MySqlInspector(Connection);
-
-            this.DbInspector.DropAllTables();
-            this.ExecuteDbCreationScript();
-        }
-
-        protected abstract void ExecuteDbCreationScript();
-
-        protected virtual void OneTimeTearDownImpl()
-        {
-            this.Connection.Dispose();
-        }
-
-        protected virtual void SetUpImpl()
-        {
-            this.DbInspector.DeleteDataFromAllTables();
-        }
-
-        protected virtual void TearDownImpl()
-        {
-        }
-
-        [OneTimeSetUp]
-        public void OneTimeSetUpBase()
-        {
-            this.OneTimeSetUpImpl();
-        }
-
-        [OneTimeTearDown]
-        public void OneTimeTearDownBase()
-        {
-            this.OneTimeTearDownImpl();
-        }
+        protected MySqlConnection Connection { get; set; }
 
         [SetUp]
         public void SetUpBase()
         {
-            this.SetUpImpl();
+            using var connection = TestHelper.CreateConnection(null);
+            if (!connection.SchemaExists("foo"))
+            {
+                connection.CreateSchema("foo");
+            }
+
+            this.Connection = TestHelper.CreateConnection(TestHelper.ConnectionString);
+            this.Connection.PurgeDatabase();
         }
 
         [TearDown]
         public void TearDownBase()
         {
-            this.TearDownImpl();
-        }
-
-        protected dynamic GetRow(string tableName, object id)
-        {
-            using var command = this.Connection.CreateCommand();
-
-            command.CommandText = $@"SELECT * FROM `{tableName}` WHERE `id` = @p_id";
-            var parameter = command.CreateParameter();
-            parameter.ParameterName = "p_id";
-            parameter.Value = id;
-            command.Parameters.Add(parameter);
-            var row = DbTools.GetCommandRows(command).SingleOrDefault();
-            return row;
-        }
-
-        protected IList<dynamic> GetRows(string tableName)
-        {
-            using var command = this.Connection.CreateCommand();
-
-            command.CommandText = $@"SELECT * FROM `{tableName}`";
-            var rows = DbTools.GetCommandRows(command);
-            return rows;
+            this.Connection.Dispose();
+            this.Connection = null;
         }
     }
 }

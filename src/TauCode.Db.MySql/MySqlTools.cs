@@ -1,85 +1,18 @@
-﻿using System;
-using System.Data;
-using System.Linq;
-using TauCode.Db.Model;
+﻿using MySql.Data.MySqlClient;
+using System;
 
 namespace TauCode.Db.MySql
 {
     public static class MySqlTools
     {
-        internal const string TableTypeForTable = "BASE TABLE"; // todo: don't need this, really
-
-        public static PrimaryKeyMold LoadPrimaryKey(IDbConnection connection, /*string dbName,*/ string tableName)
+        internal static void CheckConnectionArgument(
+            MySqlConnection connection,
+            string connectionArgumentName = "connection")
         {
-            var dbName = connection.GetDatabaseName();
-
-            // todo check args
-            // todo: schemaName not used (where is it? - Brezhnev)
-
-            using var command = connection.CreateCommand();
-
-            command.CommandText =
-                @"
-SELECT
-    TC.constraint_name    ConstraintName,
-    KCU.column_name       ColumnName,
-    KCU.ordinal_position  OrdinalPosition
-FROM
-    information_schema.table_constraints TC
-INNER JOIN
-    information_schema.key_column_usage KCU
-ON
-    KCU.table_name = TC.table_name AND
-    KCU.constraint_name = TC.constraint_name
-WHERE
-    TC.constraint_schema = @p_dbName AND
-    TC.table_schema = @p_dbName AND
-
-    KCU.constraint_schema = @p_dbName AND
-    KCU.table_schema = @p_dbName AND
-
-    TC.table_name = @p_tableName AND
-    TC.constraint_type = 'PRIMARY KEY'
-ORDER BY
-    KCU.ordinal_position
-";
-            command.AddParameterWithValue("p_dbName", dbName);
-            command.AddParameterWithValue("p_tableName", tableName);
-
-            var rows = DbTools.GetCommandRows(command);
-            if (rows.Count == 0)
+            if (connection.Database == null)
             {
-                return null;
+                throw new ArgumentException($"'{nameof(MySqlConnection.Database)}' property of connection is null.", connectionArgumentName);
             }
-
-            var pkName = rows[0].ConstraintName;
-            var pk = new PrimaryKeyMold
-            {
-                Name = pkName,
-                Columns = rows
-                    .Select(x => new IndexColumnMold
-                    {
-                        Name = (string)x.ColumnName,
-                        SortDirection = SortDirection.Ascending,
-                    })
-                    .ToList(),
-            };
-
-            if (pk.Columns.Count != 1)
-            {
-                throw new NotImplementedException();
-            }
-
-            return pk;
-        }
-
-        internal static string GetDatabaseName(this IDbConnection connection)
-        {
-            using var command = connection.CreateCommand();
-            command.CommandText = "SELECT DATABASE() FROM DUAL;";
-
-            var name = (string)command.ExecuteScalar();
-            return name;
         }
     }
 }

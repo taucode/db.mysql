@@ -1,68 +1,109 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Data;
-using MySql.Data.MySqlClient;
 using TauCode.Db.DbValueConverters;
 using TauCode.Db.Model;
+using TauCode.Db.MySql.DbValueConverters;
+using TauCode.Extensions;
 
 namespace TauCode.Db.MySql
 {
     public class MySqlCruder : DbCruderBase
     {
-        public MySqlCruder(IDbConnection connection)
-            : base(connection, null)
+        public MySqlCruder(MySqlConnection connection)
+            : base(connection, connection?.Database)
         {
+            MySqlTools.CheckConnectionArgument(connection);
         }
+
+        protected override string TransformTableName(string tableName) => tableName.ToLowerInvariant();
 
         public override IDbUtilityFactory Factory => MySqlUtilityFactory.Instance;
 
         protected override IDbValueConverter CreateDbValueConverter(ColumnMold column)
         {
-            var typeName = column.Type.Name.ToLowerInvariant();
-            switch (typeName)
+            switch (column.Type.Name)
             {
-                case "char":
-                case "varchar":
-                case "nchar":
-                case "nvarchar":
-                case "text":
-                    return new StringValueConverter();
+                case "bit":
+                    return new MySqlBitValueConverter();
+
+                case "tinyint":
+                    if (column.Type.Properties.GetDictionaryValueOrDefault("unsigned") == "true")
+                    {
+                        return new ByteValueConverter();
+                    }
+                    else
+                    {
+                        return new MySqlTinyIntValueConverter();
+                    }
+
+                case "smallint":
+                    if (column.Type.Properties.GetDictionaryValueOrDefault("unsigned") == "true")
+                    {
+                        return new UInt16ValueConverter();
+                    }
+                    else
+                    {
+                        return new Int16ValueConverter();
+                    }
 
                 case "int":
-                case "integer":
-                    return new Int32ValueConverter();
+                case "mediumint":
+                    if (column.Type.Properties.GetDictionaryValueOrDefault("unsigned") == "true")
+                    {
+                        return new UInt32ValueConverter();
+                    }
+                    else
+                    {
+                        return new Int32ValueConverter();
+                    }
 
-                case "timestamp":
-                case "date":
-                case "datetime":
-                    return new DateTimeValueConverter();
 
-                case "bit":
-                    return new BooleanValueConverter();
+                case "bigint":
+                    if (column.Type.Properties.GetDictionaryValueOrDefault("unsigned") == "true")
+                    {
+                        return new UInt64ValueConverter();
+                    }
+                    else
+                    {
+                        return new Int64ValueConverter();
+                    }
 
-                case "binary":
-                case "varbinary":
-                    return new ByteArrayValueConverter();
+                case "decimal":
+                    return new DecimalValueConverter();
+
+                case "float":
+                    return new SingleValueConverter();
 
                 case "double":
                     return new DoubleValueConverter();
 
-                case "real":
-                case "float":
-                    return new SingleValueConverter();
+                case "tinytext":
+                case "text":
+                case "mediumtext":
+                case "longtext":
+                case "char":
+                case "varchar":
+                    return new StringValueConverter();
 
-                case "money":
-                case "decimal":
-                case "numeric":
-                    return new DecimalValueConverter();
+                case "date":
+                case "datetime":
+                case "timestamp":
+                    return new DateTimeValueConverter();
 
-                case "tinyint":
-                    return new SByteValueConverter();
+                case "time":
+                    return new TimeSpanValueConverter();
 
-                case "smallint":
+                case "year":
                     return new Int16ValueConverter();
 
-                case "bigint":
-                    return new Int64ValueConverter();
+                case "binary":
+                case "varbinary":
+                case "tinyblob":
+                case "blob":
+                case "mediumblob":
+                case "longblob":
+                    return new ByteArrayValueConverter();
 
                 default:
                     throw new NotImplementedException();
@@ -75,17 +116,61 @@ namespace TauCode.Db.MySql
 
             switch (column.Type.Name)
             {
+                case "bit":
+                    return new MySqlParameter(parameterName, MySqlDbType.Bit);
+
                 case "tinyint":
-                    return new MySqlParameter(parameterName, MySqlDbType.Byte);
+                    if (column.Type.Properties.GetDictionaryValueOrDefault("unsigned") == "true")
+                    {
+                        return new MySqlParameter(parameterName, MySqlDbType.UByte);
+                    }
+                    else
+                    {
+                        return new MySqlParameter(parameterName, MySqlDbType.Byte);
+                    }
 
                 case "smallint":
-                    return new MySqlParameter(parameterName, MySqlDbType.Int16);
+                    if (column.Type.Properties.GetDictionaryValueOrDefault("unsigned") == "true")
+                    {
+                        return new MySqlParameter(parameterName, MySqlDbType.UInt16);
+                    }
+                    else
+                    {
+                        return new MySqlParameter(parameterName, MySqlDbType.Int16);
+                    }
+
+                case "mediumint":
+                    if (column.Type.Properties.GetDictionaryValueOrDefault("unsigned") == "true")
+                    {
+                        return new MySqlParameter(parameterName, MySqlDbType.UInt24);
+                    }
+                    else
+                    {
+                        return new MySqlParameter(parameterName, MySqlDbType.Int24);
+                    }
 
                 case "int":
-                    return new MySqlParameter(parameterName, MySqlDbType.Int32);
+                    if (column.Type.Properties.GetDictionaryValueOrDefault("unsigned") == "true")
+                    {
+                        return new MySqlParameter(parameterName, MySqlDbType.UInt32);
+                    }
+                    else
+                    {
+                        return new MySqlParameter(parameterName, MySqlDbType.Int32);
+                    }
 
                 case "bigint":
-                    return new MySqlParameter(parameterName, MySqlDbType.Int64);
+                    if (column.Type.Properties.GetDictionaryValueOrDefault("unsigned") == "true")
+                    {
+                        return new MySqlParameter(parameterName, MySqlDbType.UInt64);
+                    }
+                    else
+                    {
+                        return new MySqlParameter(parameterName, MySqlDbType.Int64);
+                    }
+
+                case "decimal":
+                    return new MySqlParameter(parameterName, MySqlDbType.Decimal);
 
                 case "float":
                     return new MySqlParameter(parameterName, MySqlDbType.Float);
@@ -93,35 +178,56 @@ namespace TauCode.Db.MySql
                 case "double":
                     return new MySqlParameter(parameterName, MySqlDbType.Double);
 
-                case "decimal":
-                    var parameter = new MySqlParameter(parameterName, MySqlDbType.Decimal);
-                    parameter.Scale = (byte)(column.Type.Scale ?? 0);
-                    parameter.Precision = (byte)(column.Type.Precision ?? 0);
-                    return parameter;
-
                 case "char":
-                    return new MySqlParameter(
-                        parameterName,
-                        MySqlDbType.String,
-                        column.Type.Size ?? throw new NotImplementedException());
+                    return new MySqlParameter(parameterName, MySqlDbType.String);
 
                 case "varchar":
-                    return new MySqlParameter(
-                        parameterName,
-                        MySqlDbType.VarChar,
-                        column.Type.Size ?? throw new NotImplementedException());
+                    return new MySqlParameter(parameterName, MySqlDbType.VarChar);
+
+                case "date":
+                    return new MySqlParameter(parameterName, MySqlDbType.Date);
+
+                case "datetime":
+                    return new MySqlParameter(parameterName, MySqlDbType.DateTime);
+
+                case "timestamp":
+                    return new MySqlParameter(parameterName, MySqlDbType.Timestamp);
+
+                case "time":
+                    return new MySqlParameter(parameterName, MySqlDbType.Time);
+
+                case "year":
+                    return new MySqlParameter(parameterName, MySqlDbType.Year);
+
+                case "binary":
+                    return new MySqlParameter(parameterName, MySqlDbType.Binary);
+
+                case "varbinary":
+                    return new MySqlParameter(parameterName, MySqlDbType.VarBinary);
+
+                case "tinytext":
+                    return new MySqlParameter(parameterName, MySqlDbType.TinyText);
 
                 case "text":
                     return new MySqlParameter(parameterName, MySqlDbType.Text);
 
-                case "varbinary":
-                    return new MySqlParameter(
-                        parameterName,
-                        MySqlDbType.Blob,
-                        column.Type.Size ?? throw new NotImplementedException());
+                case "mediumtext":
+                    return new MySqlParameter(parameterName, MySqlDbType.MediumText);
 
-                case "datetime":
-                    return new MySqlParameter(parameterName, MySqlDbType.DateTime);
+                case "longtext":
+                    return new MySqlParameter(parameterName, MySqlDbType.LongText);
+
+                case "tinyblob":
+                    return new MySqlParameter(parameterName, MySqlDbType.TinyBlob);
+
+                case "blob":
+                    return new MySqlParameter(parameterName, MySqlDbType.Blob);
+
+                case "mediumblob":
+                    return new MySqlParameter(parameterName, MySqlDbType.MediumBlob);
+
+                case "longblob":
+                    return new MySqlParameter(parameterName, MySqlDbType.LongBlob);
 
                 default:
                     throw new NotImplementedException();

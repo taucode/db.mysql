@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using MySql.Data.MySqlClient;
+﻿using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using NUnit.Framework;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using TauCode.Db.Data;
 using TauCode.Db.DbValueConverters;
 using TauCode.Db.Exceptions;
 using TauCode.Db.MySql.DbValueConverters;
@@ -262,21 +263,25 @@ namespace TauCode.Db.MySql.Tests.DbSerializer
             this.Connection.ExecuteSingleSql("DELETE FROM `zeta`.`PersonData`");
             this.Connection.ExecuteSingleSql("DELETE FROM `zeta`.`Person`");
 
+            serializer.Cruder.BeforeInsertRow = (table, row, index) =>
+            {
+                var dynamicRow = (DynamicRow)row;
+
+                if (table.Name.Equals("Person", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    var birthday = (string)dynamicRow.GetProperty("Birthday");
+                    var birthdayDateTime = DateTime.Parse(birthday.Substring("Month_".Length));
+                    dynamicRow.SetProperty("Birthday", birthdayDateTime);
+                }
+
+                return dynamicRow;
+            };
+
+
             // Act
             serializer.DeserializeTableData(
                 "Person",
-                json,
-                (tableMold, row) =>
-                {
-                    if (tableMold.Name == "Person")
-                    {
-                        var birthday = (string)row.GetValue("Birthday");
-                        var birthdayDateTime = DateTime.Parse(birthday.Substring("Month_".Length));
-                        row.SetValue("Birthday", birthdayDateTime);
-                    }
-
-                    return row;
-                });
+                json);
 
             // Assert
             IDbCruder cruder = new MySqlCruder(this.Connection);
@@ -403,21 +408,24 @@ namespace TauCode.Db.MySql.Tests.DbSerializer
             IDbSerializer serializer = new MySqlSerializer(this.Connection);
             var json = this.GetType().Assembly.GetResourceText("DeserializeDbInput.json", true);
 
+            serializer.Cruder.BeforeInsertRow = (table, row, index) =>
+            {
+                var dynamicRow = (DynamicRow)row;
+
+                if (table.Name.Equals("Person", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    var birthday = (string)dynamicRow.GetProperty("Birthday");
+                    var birthdayDateTime = DateTime.Parse(birthday.Substring("Month_".Length));
+                    dynamicRow.SetProperty("Birthday", birthdayDateTime);
+                }
+
+                return dynamicRow;
+            };
+
             // Act
             serializer.DeserializeDbData(
                 json,
-                x => x != "WorkInfo",
-                (tableMold, row) =>
-                {
-                    if (tableMold.Name == "Person")
-                    {
-                        var birthday = (string)row.GetValue("Birthday");
-                        var birthdayDateTime = DateTime.Parse(birthday.Substring("Month_".Length));
-                        row.SetValue("Birthday", birthdayDateTime);
-                    }
-
-                    return row;
-                });
+                x => x != "WorkInfo");
 
             // Assert
 
@@ -544,21 +552,24 @@ namespace TauCode.Db.MySql.Tests.DbSerializer
             IDbSerializer serializer = new MySqlSerializer(this.Connection);
             var json = this.GetType().Assembly.GetResourceText("DeserializeDbInput.json", true);
 
+            serializer.Cruder.BeforeInsertRow = (table, row, index) =>
+            {
+                var dynamicRow = (DynamicRow)row;
+
+                if (table.Name.Equals("Person", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    var birthday = (string)dynamicRow.GetProperty("Birthday");
+                    var birthdayDateTime = DateTime.Parse(birthday.Substring("Month_".Length));
+                    dynamicRow.SetProperty("Birthday", birthdayDateTime);
+                }
+
+                return dynamicRow;
+            };
+
             // Act
             serializer.DeserializeDbData(
                 json,
-                null,
-                (tableMold, row) =>
-                {
-                    if (tableMold.Name == "Person")
-                    {
-                        var birthday = (string)row.GetValue("Birthday");
-                        var birthdayDateTime = DateTime.Parse(birthday.Substring("Month_".Length));
-                        row.SetValue("Birthday", birthdayDateTime);
-                    }
-
-                    return row;
-                });
+                null);
 
             // Assert
 

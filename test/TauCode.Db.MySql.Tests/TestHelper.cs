@@ -20,7 +20,7 @@ namespace TauCode.Db.MySql.Tests
 
         internal static void PurgeDatabase(this MySqlConnection connection)
         {
-            new MySqlSchemaExplorer(connection).PurgeDatabase();
+            new MySqlSchemaExplorer(connection).DropAllSchemas();
 
             connection.CreateSchema("foo");
 

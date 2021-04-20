@@ -1,8 +1,6 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
 using System.Data;
-using TauCode.Db.Data;
-using TauCode.Db.Model;
 
 namespace TauCode.Db.MySql
 {
@@ -12,15 +10,13 @@ namespace TauCode.Db.MySql
             MySqlConnection connection,
             Func<string> metadataJsonGetter,
             Func<string> dataJsonGetter,
-            Func<string, bool> tableNamePredicate = null,
-            Func<TableMold, DynamicRow, DynamicRow> rowTransformer = null)
+            Func<string, bool> tableNamePredicate = null)
             : base(
                 connection,
                 connection?.Database,
                 metadataJsonGetter,
                 dataJsonGetter,
-                tableNamePredicate,
-                rowTransformer)
+                tableNamePredicate)
         {
             MySqlTools.CheckConnectionArgument(connection);
         }

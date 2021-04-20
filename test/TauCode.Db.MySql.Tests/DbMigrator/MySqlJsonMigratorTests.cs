@@ -1,7 +1,9 @@
-﻿using System;
-using MySql.Data.MySqlClient;
+﻿using MySql.Data.MySqlClient;
 using NUnit.Framework;
+using System;
+using TauCode.Db.Data;
 using TauCode.Db.Exceptions;
+using TauCode.Db.Extensions;
 using TauCode.Extensions;
 
 namespace TauCode.Db.MySql.Tests.DbMigrator
@@ -111,21 +113,24 @@ namespace TauCode.Db.MySql.Tests.DbMigrator
                 this.Connection,
                 () => this.GetType().Assembly.GetResourceText("MigrateMetadataInput.json", true),
                 () => this.GetType().Assembly.GetResourceText("MigrateDataCustomInput.json", true),
-                x => !string.Equals(x, "WorkInfo", StringComparison.InvariantCultureIgnoreCase),
-                (tableMold, row) =>
+                x => !string.Equals(x, "WorkInfo", StringComparison.InvariantCultureIgnoreCase));
+
+            migrator.Serializer.Cruder.BeforeInsertRow = (table, row, index) =>
+            {
+                var dynamicRow = (DynamicRow)row;
+
+                if (table.Name.Equals("Person", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    if (tableMold.Name == "Person")
-                    {
-                        var birthday = (string)row.GetValue("Birthday");
-                        var birthdayDateTime = DateTime.Parse(birthday.Substring("Month_".Length));
-                        row.SetValue("Birthday", birthdayDateTime);
+                    var birthday = (string)dynamicRow.GetProperty("Birthday");
+                    var birthdayDateTime = DateTime.Parse(birthday.Substring("Month_".Length));
+                    dynamicRow.SetProperty("Birthday", birthdayDateTime);
 
-                        var genderString = (string)row.GetValue("Gender");
-                        row.SetValue("Gender", (byte)genderString.ToEnum<Gender>());
-                    }
+                    var genderString = (string)dynamicRow.GetProperty("Gender");
+                    dynamicRow.SetProperty("Gender", (byte)genderString.ToEnum<Gender>());
+                }
 
-                    return row;
-                });
+                return dynamicRow;
+            };
 
             // Act
             migrator.Migrate();

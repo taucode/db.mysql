@@ -20,7 +20,7 @@ namespace TauCode.Db.MySql
 
         public override IDbUtilityFactory Factory => MySqlUtilityFactory.Instance;
 
-        protected override IDbValueConverter CreateDbValueConverter(ColumnMold column)
+        protected override IDbValueConverter CreateDbValueConverter(string tableName, ColumnMold column)
         {
             switch (column.Type.Name)
             {
@@ -106,7 +106,7 @@ namespace TauCode.Db.MySql
                     return new ByteArrayValueConverter();
 
                 default:
-                    throw new NotImplementedException();
+                    throw this.CreateColumnTypeNotSupportedException(tableName, column.Name, column.Type.Name);
             }
         }
 
@@ -230,8 +230,13 @@ namespace TauCode.Db.MySql
                     return new MySqlParameter(parameterName, MySqlDbType.LongBlob);
 
                 default:
-                    throw new NotImplementedException();
+                    throw this.CreateColumnTypeNotSupportedException(tableName, column.Name, column.Type.Name);
             }
+        }
+
+        protected override void FitParameterValue(IDbDataParameter parameter)
+        {
+            // idle now...
         }
     }
 }

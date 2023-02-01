@@ -1,12 +1,11 @@
 ﻿using MySql.Data.MySqlClient;
 using NUnit.Framework;
-using System;
 using TauCode.Db.Data;
 using TauCode.Db.Exceptions;
 using TauCode.Db.Extensions;
 using TauCode.Extensions;
 
-namespace TauCode.Db.MySql.Tests.DbMigrator
+namespace TauCode.Db.MySql.LocalTests.DbMigrator
 {
     [TestFixture]
     public class MySqlJsonMigratorTests : TestBase

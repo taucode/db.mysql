@@ -1,4 +1,4 @@
-﻿namespace TauCode.Db.MySql.Tests
+﻿namespace TauCode.Db.MySql.LocalTests
 {
     public enum Gender : byte
     {

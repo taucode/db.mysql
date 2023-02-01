@@ -1,11 +1,8 @@
-﻿using MySql.Data.MySqlClient;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
+﻿using System.Text;
+using MySql.Data.MySqlClient;
 using TauCode.Db.Extensions;
 
-namespace TauCode.Db.MySql.Tests
+namespace TauCode.Db.MySql.LocalTests
 {
     internal static class TestHelper
     {

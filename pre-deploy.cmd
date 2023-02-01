@@ -1,9 +1,9 @@
 dotnet restore
 
-dotnet build --configuration Debug
-dotnet build --configuration Release
+dotnet build TauCode.Db.MySql.sln -c Debug
+dotnet build TauCode.Db.MySql.sln -c Release
 
-dotnet test -c Debug .\test\TauCode.Db.MySql.Tests\TauCode.Db.MySql.Tests.csproj
-dotnet test -c Release .\test\TauCode.Db.MySql.Tests\TauCode.Db.MySql.Tests.csproj
+dotnet test TauCode.Db.MySql.sln -c Debug
+dotnet test TauCode.Db.MySql.sln -c Release
 
 nuget pack nuget\TauCode.Db.MySql.nuspec

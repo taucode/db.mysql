@@ -1,10 +1,7 @@
-﻿using MySql.Data.MySqlClient;
+﻿using System.Text;
+using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using TauCode.Db.Data;
 using TauCode.Db.DbValueConverters;
 using TauCode.Db.Exceptions;
@@ -12,7 +9,7 @@ using TauCode.Db.Model;
 using TauCode.Db.MySql.DbValueConverters;
 using TauCode.Extensions;
 
-namespace TauCode.Db.MySql.Tests.DbCruder
+namespace TauCode.Db.MySql.LocalTests.DbCruder
 {
     [TestFixture]
     public class MySqlCruderTests : TestBase

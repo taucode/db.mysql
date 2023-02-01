@@ -1,7 +1,7 @@
 ﻿using MySql.Data.MySqlClient;
 using NUnit.Framework;
 
-namespace TauCode.Db.MySql.Tests
+namespace TauCode.Db.MySql.LocalTests
 {
     [TestFixture]
     public abstract class TestBase

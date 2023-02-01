@@ -1,9 +1,8 @@
 ﻿using MySql.Data.MySqlClient;
 using NUnit.Framework;
-using System;
 using TauCode.Db.Exceptions;
 
-namespace TauCode.Db.MySql.Tests.DbInspector
+namespace TauCode.Db.MySql.LocalTests.DbInspector
 {
     [TestFixture]
     public class MySqlInspectorTests : TestBase

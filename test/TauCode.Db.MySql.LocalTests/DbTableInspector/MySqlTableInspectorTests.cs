@@ -1,13 +1,10 @@
 ﻿using MySql.Data.MySqlClient;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using TauCode.Db.Exceptions;
 using TauCode.Db.Model;
 using TauCode.Extensions;
 
-namespace TauCode.Db.MySql.Tests.DbTableInspector
+namespace TauCode.Db.MySql.LocalTests.DbTableInspector
 {
     [TestFixture]
     public class MySqlTableInspectorTests : TestBase

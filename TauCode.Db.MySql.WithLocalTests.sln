@@ -1,0 +1,56 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32616.157
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{0A7F5C36-AFDB-46CC-8936-B486EB8FA65F}"
+	ProjectSection(SolutionItems) = preProject
+		build\azure-pipelines-dev.yml = build\azure-pipelines-dev.yml
+		build\azure-pipelines-main.yml = build\azure-pipelines-main.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "misc", "misc", "{E4C4C5B6-698D-40D5-8CA1-115E88267862}"
+	ProjectSection(SolutionItems) = preProject
+		misc\changelog.txt = misc\changelog.txt
+		misc\todo.txt = misc\todo.txt
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nuget", "nuget", "{44ADFB69-335B-4F5F-A41C-C0E960CF3DC1}"
+	ProjectSection(SolutionItems) = preProject
+		nuget\TauCode.Db.MySql.nuspec = nuget\TauCode.Db.MySql.nuspec
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{CD97430E-9971-4978-AE15-3247387B5235}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{62DC4F5C-90B3-4C12-8102-DBBE3017A867}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TauCode.Db.MySql", "src\TauCode.Db.MySql\TauCode.Db.MySql.csproj", "{357B45B3-AE2C-48E2-A224-2E1BA3BAB585}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TauCode.Db.MySql.LocalTests", "test\TauCode.Db.MySql.LocalTests\TauCode.Db.MySql.LocalTests.csproj", "{B0BBEA84-64F5-4CDF-A493-EB4621D4914C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{357B45B3-AE2C-48E2-A224-2E1BA3BAB585}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{357B45B3-AE2C-48E2-A224-2E1BA3BAB585}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{357B45B3-AE2C-48E2-A224-2E1BA3BAB585}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{357B45B3-AE2C-48E2-A224-2E1BA3BAB585}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B0BBEA84-64F5-4CDF-A493-EB4621D4914C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B0BBEA84-64F5-4CDF-A493-EB4621D4914C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B0BBEA84-64F5-4CDF-A493-EB4621D4914C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B0BBEA84-64F5-4CDF-A493-EB4621D4914C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{357B45B3-AE2C-48E2-A224-2E1BA3BAB585} = {CD97430E-9971-4978-AE15-3247387B5235}
+		{B0BBEA84-64F5-4CDF-A493-EB4621D4914C} = {62DC4F5C-90B3-4C12-8102-DBBE3017A867}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2412B73A-1CC4-4E0E-853E-BED60A41911F}
+	EndGlobalSection
+EndGlobal

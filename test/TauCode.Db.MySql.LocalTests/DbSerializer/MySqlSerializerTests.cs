@@ -1,19 +1,16 @@
-﻿using MySql.Data.MySqlClient;
+﻿using System.Data;
+using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
 using TauCode.Db.Data;
 using TauCode.Db.DbValueConverters;
 using TauCode.Db.Exceptions;
 using TauCode.Db.MySql.DbValueConverters;
 using TauCode.Extensions;
 
-namespace TauCode.Db.MySql.Tests.DbSerializer
+namespace TauCode.Db.MySql.LocalTests.DbSerializer
 {
     [TestFixture]
     public class MySqlSerializerTests : TestBase

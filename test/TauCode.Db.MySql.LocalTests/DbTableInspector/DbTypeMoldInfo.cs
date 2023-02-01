@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace TauCode.Db.MySql.Tests.DbTableInspector
+﻿namespace TauCode.Db.MySql.LocalTests.DbTableInspector
 {
     public class DbTypeMoldInfo : IEquatable<DbTypeMoldInfo>
     {

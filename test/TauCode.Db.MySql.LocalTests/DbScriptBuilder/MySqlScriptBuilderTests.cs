@@ -1,13 +1,10 @@
 ﻿using Newtonsoft.Json;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using TauCode.Db.Exceptions;
 using TauCode.Db.Model;
 using TauCode.Extensions;
 
-namespace TauCode.Db.MySql.Tests.DbScriptBuilder
+namespace TauCode.Db.MySql.LocalTests.DbScriptBuilder
 {
     [TestFixture]
     public class MySqlScriptBuilderTests : TestBase

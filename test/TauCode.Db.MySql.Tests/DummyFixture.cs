@@ -1,9 +1,9 @@
 ﻿using NUnit.Framework;
 
-namespace TauCode.Db.Npgsql.Tests;
+namespace TauCode.Db.MySql.Tests;
 
 [TestFixture]
-public class DbMySqlDummyFixture
+public class DummyFixture
 {
     [Test]
     public void DummyTest()

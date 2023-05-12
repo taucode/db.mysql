@@ -1,44 +1,20 @@
-﻿using MySql.Data.MySqlClient;
-using System.Data;
+﻿namespace TauCode.Db.MySql;
 
-namespace TauCode.Db.MySql
+// todo regions
+
+public class MySqlUtilityFactory : IUtilityFactory
 {
-    public class MySqlUtilityFactory : IDbUtilityFactory
+    public static MySqlUtilityFactory Instance { get; } = new();
+
+    private MySqlUtilityFactory()
     {
-        public static MySqlUtilityFactory Instance { get; } = new MySqlUtilityFactory();
-
-        private MySqlUtilityFactory()
-        {
-        }
-
-        public IDbDialect GetDialect() => MySqlDialect.Instance;
-
-        public IDbScriptBuilder CreateScriptBuilder(string schemaName) => new MySqlScriptBuilder(schemaName);
-
-        public IDbConnection CreateConnection() => new MySqlConnection();
-        public IDbSchemaExplorer CreateSchemaExplorer(IDbConnection connection)
-        {
-            return new MySqlSchemaExplorer((MySqlConnection)connection);
-        }
-
-        public IDbInspector CreateInspector(IDbConnection connection, string schemaName)
-        {
-            return new MySqlInspector((MySqlConnection)connection);
-        }
-
-        public IDbTableInspector CreateTableInspector(IDbConnection connection, string schemaName, string tableName)
-        {
-            return new MySqlTableInspector((MySqlConnection)connection, tableName);
-        }
-
-        public IDbCruder CreateCruder(IDbConnection connection, string schemaName)
-        {
-            return new MySqlCruder((MySqlConnection)connection);
-        }
-
-        public IDbSerializer CreateSerializer(IDbConnection connection, string schemaName)
-        {
-            return new MySqlSerializer((MySqlConnection)connection);
-        }
     }
+
+    public IDialect Dialect { get; } = new MySqlDialect();
+
+    public IScriptBuilder CreateScriptBuilder() => new MySqlScriptBuilder();
+
+    public IExplorer CreateExplorer() => new MySqlExplorer();
+
+    public ICruder CreateCruder() => new MySqlCruder();
 }
